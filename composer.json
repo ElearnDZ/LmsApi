@@ -1,0 +1,10 @@
+{
+    "name": "charan/hss-api",
+    "authors": [
+        {
+            "name": "charan",
+            "email": "charan@contourgroupinc.com"
+        }
+    ],
+    "require": {}
+}
