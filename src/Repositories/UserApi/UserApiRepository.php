@@ -11,9 +11,12 @@ use LmsApi\Traits\UserApiLog;
 
 use LmsApi\Requests\UserApi\DeleteRequest;
 use LmsApi\Requests\UserApi\CreateRequest;
+use LmsApi\Requests\UserApi\ActivateRequest;
+
 use LmsApi\Commands\CreateUsers;
 use LmsApi\Commands\UpdateUsers;
 use LmsApi\Commands\DeleteUsers;
+use LmsApi\Commands\ActivateUsers;
 
 
 class UserApiRepository implements UserApiInterface
@@ -84,6 +87,19 @@ class UserApiRepository implements UserApiInterface
     }
     return [
       'deactivated_users' => count($input['user_ids']),
+      'errors'            => $input['errors']
+    ];
+
+  }
+
+  public function activateUsers(ActivateRequest $request)
+  {
+    $input = $this->deleteUsersApiValidate($request);
+    if(count($input['user_ids']) > 0){
+      Queue::push(new ActivateUsers($input['user_ids']));
+    }
+    return [
+      'activated_users' => count($input['user_ids']),
       'errors'            => $input['errors']
     ];
 

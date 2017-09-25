@@ -8,4 +8,5 @@ interface UserApiInterface
   public function getDeactivatedUsers();
   public function updateUsers(UserApi\CreateRequest $request);
   public function deleteUsers(UserApi\DeleteRequest $request);
+  public function activateUsers(UserApi\ActivateRequest $request);
 }

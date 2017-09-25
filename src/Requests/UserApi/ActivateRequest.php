@@ -2,7 +2,7 @@
 
 use App\Http\Requests\Request;
 
-class DeleteRequest extends Request
+class ActivateRequest extends Request
 {
   /**
    * Determine if the user is authorized to make this request.
@@ -21,9 +21,7 @@ class DeleteRequest extends Request
    */
   public function rules()
   {
-    return [
-      
-    ];
+    return [];
   }
 
   public function messages()

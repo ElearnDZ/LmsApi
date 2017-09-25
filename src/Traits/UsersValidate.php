@@ -24,9 +24,9 @@ trait UsersValidate
        if(!is_array($user_ids)){
          $result["errors"] = 'user_ids should be an array json format';
        }else{
-         $result['user_ids'] = User::whereIn('id',$user_ids)->get(['id'])->toArray();
+         $result['user_ids'] = User::withTrashed()->whereIn('id',$user_ids)->get(['id'])->toArray();
        }
-     }     
+     }
      return $result;
 
    }

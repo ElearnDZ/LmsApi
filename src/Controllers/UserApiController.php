@@ -32,4 +32,9 @@ class UserApiController extends Controller
   {
     return $this->_user_api->deleteUsers($request);
   }
+
+  public function activateUsers(UserApi\ActivateRequest $request)
+  {
+    return $this->_user_api->activateUsers($request);
+  }
 }
