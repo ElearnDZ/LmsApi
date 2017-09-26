@@ -2,9 +2,9 @@
 
 use LmsApi\Models\ApiLog;
 
-trait UserApiLog
+trait ApiLogTrait
 {
-  function updateLog($request,$result)
+  function apiLog($request,$result)
   {
     ApiLog::create([
       'api_request_route' => $request->url(),

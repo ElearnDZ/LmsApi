@@ -7,3 +7,8 @@ Route::group(['prefix'=>'api/lms'],function(){
   Route::post('user/deactivate','LmsApi\Controllers\UserApiController@destroy');
   Route::post('user/activate','LmsApi\Controllers\UserApiController@activateUsers');
 });
+
+Route::group(['prefix'=>'api/lms/course'],function(){
+  Route::get('all','LmsApi\Controllers\CourseApiController@getAll');
+  Route::post('update','LmsApi\Controllers\CourseApiController@coursesUpdate');
+});

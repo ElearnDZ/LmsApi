@@ -59,22 +59,30 @@ trait UsersValidate
    public function userDetailValidates($users)
    {
      $error_line = [];
-     $out_users = [];
-     $existing_users = [];
+     $out_users  = collect([]);
+     $existing_users = collect([]);
      $level_details = LevelDetail::with('levels')->get();
      $users_in_db   = User::withTrashed()->get();
      foreach($users as $key => $user){
        $error = [];
-       if(!isset($user->forename) || !$user->forename){
+       if(!isset($user->forename) || !$user->forename || !ctype_alnum($user->forename)){
          $error[] = 'forename' ;
        }
 
-       if(!isset($user->surname) || !$user->surname){
+       if(!isset($user->surname) || !$user->surname || !ctype_alnum($user->surname)){
          $error[] = 'surname' ;
        }
 
        if(!isset($user->emp_no) || !$user->emp_no || !ctype_alnum($user->emp_no)){
          $error[] = 'emp_no' ;
+       }else{
+         if($out_users->contains('login',$user->emp_no)){
+           $error[] = 'emp_no duplicate';
+         }
+
+         if($existing_users->contains('login',$user->emp_no)){
+           $error[] = 'emp_no duplicate';
+         }
        }
 
        if(!isset($user->email) || !$user->email || !filter_var($user->email, FILTER_VALIDATE_EMAIL)){
@@ -112,16 +120,16 @@ trait UsersValidate
            'password'   => 'Changeme1!',
          ];
          if ($users_in_db->contains('login',$user->emp_no)) {
-           $existing_users[] = $out_user;
+           $existing_users->push($out_user);
          } else{
-           $out_users[] = $out_user;
+           $out_users->push($out_user);
          }
        }
      }
 
      return [
-       'users' => $out_users,
-       'existing_users' => $existing_users,
+       'users' => $out_users->toArray(),
+       'existing_users' => $existing_users->toArray(),
        'errors' => $error_line
      ];
    }

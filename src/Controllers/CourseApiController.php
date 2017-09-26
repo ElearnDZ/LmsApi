@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Controller;
 use LmsApi\Repositories\CourseApi\CourseApiInterface;
+use LmsApi\Requests\CourseApi;
 
 class CourseApiController extends Controller
 {
@@ -17,8 +18,9 @@ class CourseApiController extends Controller
     return $this->_course_api->getAll();
   }
 
-  public function getDeactivatedUsers()
-  {
-    return $this->_course_api->getDeactivatedUsers();
+  public function coursesUpdate(CourseApi\UpdateRequest $request)
+  {    
+    return $this->_course_api->update($request);
   }
+
 }

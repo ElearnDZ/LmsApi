@@ -7,7 +7,7 @@ use Request;
 use Queue;
 use LmsApi\Traits\UserFilter;
 use LmsApi\Traits\UsersValidate;
-use LmsApi\Traits\UserApiLog;
+use LmsApi\Traits\ApiLogTrait;
 
 use LmsApi\Requests\UserApi\DeleteRequest;
 use LmsApi\Requests\UserApi\CreateRequest;
@@ -22,7 +22,7 @@ use LmsApi\Commands\ActivateUsers;
 class UserApiRepository implements UserApiInterface
 {
 
-  use UserFilter,UsersValidate,UserApiLog;
+  use UserFilter,UsersValidate,ApiLogTrait;
 
 
   private $_tree;
@@ -75,7 +75,7 @@ class UserApiRepository implements UserApiInterface
     $this->responseArray['users_created'] = count($input['users']);
     $this->responseArray['users_updated'] = count($input['existing_users']);
     $this->responseArray['errors'] = $input['errors'];
-    $this->updateLog($request,$this->responseArray);
+    $this->apiLog($request,$this->responseArray);
     return $this->responseArray;
   }
 
@@ -85,11 +85,13 @@ class UserApiRepository implements UserApiInterface
     if(count($input['user_ids']) > 0){
       Queue::push(new DeleteUsers($input['user_ids']));
     }
-    return [
+    $response = [
       'deactivated_users' => count($input['user_ids']),
       'errors'            => $input['errors']
     ];
 
+    $this->apiLog($request,$response);
+    return $response;
   }
 
   public function activateUsers(ActivateRequest $request)
@@ -98,10 +100,12 @@ class UserApiRepository implements UserApiInterface
     if(count($input['user_ids']) > 0){
       Queue::push(new ActivateUsers($input['user_ids']));
     }
-    return [
+    $response =  [
       'activated_users' => count($input['user_ids']),
       'errors'            => $input['errors']
     ];
 
+    $this->apiLog($request,$response);
+    return $response;
   }
 }
