@@ -4,6 +4,7 @@ use LmsApi\Models\CourseCompletion;
 use LmsApi\Models\Course;
 use App\User;
 use Config;
+use DateTime;
 
 trait CourseCompletionsValidateTrait
 {
@@ -26,6 +27,12 @@ trait CourseCompletionsValidateTrait
     }
 
     return $this->courseCompletionsInput($course_completions,$response);
+  }
+
+  public function validateDate($date, $format = 'Y-m-d H:i:s')
+  {
+      $d = DateTime::createFromFormat($format, $date);
+      return $d && $d->format($format) == $date;
   }
 
   public function courseCompletionsInput($course_completions,$response)
@@ -68,12 +75,20 @@ trait CourseCompletionsValidateTrait
         $error[] = "score";
       }
 
-      if (!isset($course_completion->from_timestamp) && !$course_completion->from_timestamp && checkdate($course_completion->from_timestamp)) {
+      if (!isset($course_completion->from_timestamp) && !$course_completion->from_timestamp) {
         $error[] = "from_timestamp";
+      } else {
+        if(!$this->validateDate($course_completion->from_timestamp)){
+          $error[] ="wrong datetime format for from_timestamp";
+        }
       }
 
-      if (!isset($course_completion->to_timestamp) && !$course_completion->to_timestamp && checkdate($course_completion->to_timestamp)) {
+      if (!isset($course_completion->to_timestamp) && !$course_completion->to_timestamp) {
         $error[] = "to_timestamp";
+      } else {
+        if(!$this->validateDate($course_completion->to_timestamp)){
+          $error[] ="wrong datetime format for to_timestamp";
+        }
       }
 
       if(!$error){
