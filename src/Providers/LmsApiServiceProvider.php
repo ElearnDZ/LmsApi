@@ -33,6 +33,12 @@ class LmsApiServiceProvider extends ServiceProvider
 			'LmsApi\Repositories\CourseApi\CourseApiInterface',
 			'LmsApi\Repositories\CourseApi\CourseApiRepository'
 		);
+
+		$this->app->bind
+		(
+			'LmsApi\Repositories\CourseCompletionsApi\CourseCompletionsApiInterface',
+			'LmsApi\Repositories\CourseCompletionsApi\CourseCompletionsApiRepository'
+		);
 	}
 
 

@@ -12,3 +12,9 @@ Route::group(['prefix'=>'api/lms/course'],function(){
   Route::get('all','LmsApi\Controllers\CourseApiController@getAll');
   Route::post('update','LmsApi\Controllers\CourseApiController@coursesUpdate');
 });
+
+
+Route::group(['prefix'=>'api/lms/course/completions'],function(){
+  Route::get('all','LmsApi\Controllers\CourseCompletionsApiController@getAll');
+  Route::post('update','LmsApi\Controllers\CourseCompletionsApiController@coursesUpdate');
+});

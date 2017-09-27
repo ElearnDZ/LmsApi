@@ -4,6 +4,11 @@ use LmsApi\Models\Course;
 
 trait CoursesValidate
 {
+  /**
+   * [validateOnUpdate description]
+   * @param  [type] $request [description]
+   * @return [type]          [description]
+   */
   public function validateOnUpdate($request)
   {
     $result = [
@@ -27,6 +32,12 @@ trait CoursesValidate
 
   }
 
+  /**
+   * [validateCourseDetails description]
+   * @param  [type] $result  [description]
+   * @param  [type] $courses [description]
+   * @return [type]          [description]
+   */
   public function validateCourseDetails($result,$courses)
   {
     $courses_in_db = Course::all();
@@ -50,25 +61,18 @@ trait CoursesValidate
         }
       }
 
-      if(!isset($course->efront_course_id) || !$course->efront_course_id || !is_numeric($course->efront_course_id)){
-        $error[] = 'efront_course_id' ;
-      }
-
       if(count($error) > 0){
         $result['errors'][] = "line ". ($key + 1).",has error in ".implode(",",$error);
       } else {
+        $course_out_array = [
+          'course_name' => filter_var($course->course_name, FILTER_SANITIZE_STRING),
+          'course_code' => filter_var($course->course_code, FILTER_SANITIZE_STRING),
+          'efront_course_id' => isset($course->efront_course_id)?$course->efront_course_id:0,
+        ];
         if($courses_in_db->contains('course_code',$course->course_code)){
-        $courses_updated->push([
-            'course_name' => $course->course_name,
-            'course_code' => $course->course_code,
-            'efront_course_id' => $course->efront_course_id,
-          ]);
+          $courses_updated->push($course_out_array);
         }else{
-          $courses_created->push([
-            'course_name' => $course->course_name,
-            'course_code' => $course->course_code,
-            'efront_course_id' => $course->efront_course_id,
-          ]);
+          $courses_created->push($course_out_array);
         }
       }
     }

@@ -30,7 +30,11 @@ trait UsersValidate
      return $result;
 
    }
-
+   /**
+    * [usersApiValidate description]
+    * @param  [type] $request [description]
+    * @return [type]          [description]
+    */
    public function usersApiValidate($request)
    {
      if(!$request->has('users')){
@@ -56,6 +60,11 @@ trait UsersValidate
      ];
    }
 
+   /**
+    * [userDetailValidates description]
+    * @param  [type] $users [description]
+    * @return [type]        [description]
+    */
    public function userDetailValidates($users)
    {
      $error_line = [];
