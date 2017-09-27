@@ -3,14 +3,14 @@
 use LmsApi\Models\CourseCompletion;
 use LmsApi\Models\Course;
 use App\User;
-
+use Config;
 
 trait CourseCompletionsValidateTrait
 {
   public function validateCourseCompletionsOnUpdate($request)
   {
     $response = [
-      'course_compeltions_created' => [],
+      'course_completions_created' => [],
       'errors' => []
     ];
 
@@ -30,10 +30,14 @@ trait CourseCompletionsValidateTrait
 
   public function courseCompletionsInput($course_completions,$response)
   {
-    $error_line = [];
+
+    $error_line               = [];
     $course_completions_in_db = CourseCompletion::all();
-    $users_in_db = User::all();
-    foreach($course_completions as $course_completion){
+    $users_in_db              = User::all();
+    $courses                  = Course::all();
+    $course_completions_created = collect([]);
+
+    foreach($course_completions as $key => $course_completion){
       $error = [];
 
       if(!isset($course_completion->emp_no) && !$course_completion->emp_no){
@@ -47,8 +51,8 @@ trait CourseCompletionsValidateTrait
       if (!isset($course_compeltion->course_code) && !$course_completion->course_code) {
         $error[]  = "course_code";
       } else {
-        if(!$courses->contains('course_code',$course_compeltion->course_code)){
-          $error[] = "course_code {$course_compeltion->code} duplicate";
+        if(!$courses->contains('course_code',$course_completion->course_code)){
+          $error[] = "course_code {$course_compeltion->code} not with us";
         }
       }
 
@@ -64,16 +68,61 @@ trait CourseCompletionsValidateTrait
         $error[] = "score";
       }
 
-      if (!isset($course_completion->from_timestamp) && !$course_completion->from_timestamp) {
+      if (!isset($course_completion->from_timestamp) && !$course_completion->from_timestamp && checkdate($course_completion->from_timestamp)) {
         $error[] = "from_timestamp";
-      }else{
-        
       }
 
-      if (!isset($course_completion->to_timestamp) && !$course_completion->to_timestamp) {
+      if (!isset($course_completion->to_timestamp) && !$course_completion->to_timestamp && checkdate($course_completion->to_timestamp)) {
         $error[] = "to_timestamp";
       }
 
+      if(!$error){
+        $course_completion_unique = $course_completions_created->filter(function($item) use($course_completion) {
+          return ($course_completion->course_code === $item['course_code']) && ($course_completion->emp_no === $item['emp_no']);
+        })->first();
+        if($course_completion_unique){
+          $error[] = "duplicate record";
+        }
+
+        $course_completion_db_duplicate = $course_completions_in_db->filter(function($item) use($course_completion) {
+          return ($course_completion->course_code === $item->course->course_code) && ($course_completion->emp_no === (Config::get('efront.LoginPrefix').$item->user->login));
+        })->first();
+        if($course_completion_db_duplicate){
+          $error[] = "duplicate record in db";
+        }
+      }
+
+      if($error){
+        $error_line[] = "line ". ($key + 1).",has error in ".implode(",",$error);
+      }else{
+
+        $user = $users_in_db->filter(function($item) use($course_completion) {
+          return ($item->login === (Config::get('efront.LoginPrefix') . $course_completion->emp_no));
+        })->first();
+
+        $course = $courses->filter(function($item) use($course_completion) {
+          return $item->course_code === $course_completion->course_code;
+        })->first();
+
+        $out_array  = [
+          'user_id'             => $user->id,
+          'course_id'           => $course->id,
+          'course_code'         => $course_completion->course_code,
+          'emp_no'              => $course_completion->emp_no,
+          'status'              => $course_completion->status,
+          'score'               => $course_completion->score,
+          'issued_certificate'  => $course_completion->issued_certificate,
+          'from_timestamp'      => date('Y-m-d H:i:s',strtotime($course_completion->from_timestamp)),
+          'to_timestamp'        => date('Y-m-d H:i:s',strtotime($course_completion->to_timestamp)),
+        ];
+
+        $course_completions_created->push($out_array);
+      }
     }
+    
+    return [
+      'course_completions_created' => $course_completions_created->toArray(),
+      'errors' => $error_line
+    ];
   }
 }

@@ -15,7 +15,7 @@ use UMS\Utils\Tree;
 
 class CourseCompletionsApiRepository implements CourseCompletionsApiInterface
 {
-  use ApiLogTrait,CourseCompletionsFilterTrait,UserFilter;
+  use ApiLogTrait,CourseCompletionsFilterTrait,UserFilter,CourseCompletionsValidateTrait;
 
   private $_tree;
   const SUPERADMIN_DETAIL_ID = 1;
@@ -35,14 +35,14 @@ class CourseCompletionsApiRepository implements CourseCompletionsApiInterface
 
   public function update(CourseCompletionsApi\UpdateRequest $request)
   {
-    $course_compeltions = $this->validateCourseCompletionsOnUpdate($request);
+    $course_completions = $this->validateCourseCompletionsOnUpdate($request);
 
-    if(count($course_compeltions['course_compeltions_created']) > 0){
-      Queue::push(new CreateCourseCompletions($course_compeltions['course_compeltions_created']));
+    if(count($course_completions['course_completions_created']) > 0){
+      Queue::push(new CreateCourseCompletions($course_completions['course_completions_created']));
     }
     $response =  [
-      'course_compeltions_created' => count($course_compeltions['course_compeltions_created']),      
-      'errors'          => $course_compeltions['errors'],
+      'course_completions_created' => count($course_completions['course_completions_created']),
+      'errors'          => $course_completions['errors'],
     ];
     $this->apiLog($request,$response);
     return $response;

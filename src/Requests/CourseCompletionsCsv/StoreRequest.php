@@ -1,8 +1,8 @@
-<?php namespace LmsApi\Requests\CourseCompletionsApi;
+<?php namespace LmsApi\Requests\CourseCompletionsCsv;
 
 use App\Http\Requests\Request;
 
-class UpdateRequest extends Request
+class StoreRequest extends Request
 {
   /**
    * Determine if the user is authorized to make this request.

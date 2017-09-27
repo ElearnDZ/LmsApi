@@ -18,3 +18,8 @@ Route::group(['prefix'=>'api/lms/course/completions'],function(){
   Route::get('all','LmsApi\Controllers\CourseCompletionsApiController@getAll');
   Route::post('update','LmsApi\Controllers\CourseCompletionsApiController@coursesUpdate');
 });
+
+Route::group(['prefix'=>'csv/lms/course/completions','middleware'=>['auth','roles']],function(){
+  Route::get('create','LmsApi\Controllers\CourseCompletionsCsvController@create');
+  Route::post('create','LmsApi\Controllers\CourseCompletionsCsvController@store');
+});

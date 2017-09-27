@@ -11,7 +11,9 @@ class LmsApiServiceProvider extends ServiceProvider
 	 */
 	public function boot()
 	{
-
+		$this->publishes([
+			dirname(__DIR__).'/views' => base_path('resources/views/vendor/LmsApi'),			
+		]);
 	}
 
 	/**
@@ -38,6 +40,12 @@ class LmsApiServiceProvider extends ServiceProvider
 		(
 			'LmsApi\Repositories\CourseCompletionsApi\CourseCompletionsApiInterface',
 			'LmsApi\Repositories\CourseCompletionsApi\CourseCompletionsApiRepository'
+		);
+
+		$this->app->bind
+		(
+			'LmsApi\Repositories\CourseCompletionsCsv\CourseCompletionsCsvInterface',
+			'LmsApi\Repositories\CourseCompletionsCsv\CourseCompletionsCsvRepository'
 		);
 	}
 
