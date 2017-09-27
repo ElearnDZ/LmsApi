@@ -12,7 +12,8 @@ class LmsApiServiceProvider extends ServiceProvider
 	public function boot()
 	{
 		$this->publishes([
-			dirname(__DIR__).'/views' => base_path('resources/views/vendor/LmsApi'),			
+			dirname(__DIR__).'/Config/lmsapi.php' => config_path('lmsapi.php'),
+			dirname(__DIR__).'/views' => base_path('resources/views/vendor/LmsApi'),
 		]);
 	}
 
