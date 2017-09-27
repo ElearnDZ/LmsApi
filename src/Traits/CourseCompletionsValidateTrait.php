@@ -85,7 +85,7 @@ trait CourseCompletionsValidateTrait
         }
 
         $course_completion_db_duplicate = $course_completions_in_db->filter(function($item) use($course_completion) {
-          return ($course_completion->course_code === $item->course->course_code) && ($course_completion->emp_no === (Config::get('efront.LoginPrefix').$item->user->login));
+          return ($course_completion->course_code === $item->course->course_code) && ((Config::get('efront.LoginPrefix').$course_completion->emp_no === $item->user->login));
         })->first();
         if($course_completion_db_duplicate){
           $error[] = "duplicate record in db";
@@ -119,7 +119,7 @@ trait CourseCompletionsValidateTrait
         $course_completions_created->push($out_array);
       }
     }
-    
+
     return [
       'course_completions_created' => $course_completions_created->toArray(),
       'errors' => $error_line

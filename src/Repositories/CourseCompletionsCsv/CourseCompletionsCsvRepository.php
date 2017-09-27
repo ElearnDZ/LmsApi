@@ -3,6 +3,8 @@
 use LmsApi\Requests\CourseCompletionsCsv;
 use Excel;
 use LmsApi\Traits\CourseCompletionsValidateTrait;
+use LmsApi\Commands\CreateCourseCompletions;
+use Queue;
 
 class CourseCompletionsCsvRepository implements CourseCompletionsCsvInterface
 {
@@ -24,9 +26,17 @@ class CourseCompletionsCsvRepository implements CourseCompletionsCsvInterface
       'errors' => []
     ];
 
-    $response_array = $this->courseCompletionsInput($course_completions,$response);
-    if(count($course_compeltions['course_completions_created']) > 0){
-      Queue::push(new CreateCourseCompletions($course_compeltions['course_completions_created']));
+    $course_completions = $this->courseCompletionsInput($course_completions,$response);
+
+    if(count($course_completions['course_completions_created']) > 0){
+      Queue::push(new CreateCourseCompletions($course_completions['course_completions_created']));
     }
+
+    $response =  [
+      'course_completions_created' => count($course_completions['course_completions_created']),
+      'errors'          => $course_completions['errors'],
+    ];
+
+    return redirect()->back()->withErrors($response);
   }
 }
