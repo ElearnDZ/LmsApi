@@ -35,17 +35,13 @@ class CourseCompletionsApiRepository implements CourseCompletionsApiInterface
 
   public function update(CourseCompletionsApi\UpdateRequest $request)
   {
-    $course_compeltions = $this->validateOnUpdate($request);
+    $course_compeltions = $this->validateCourseCompletionsOnUpdate($request);
 
     if(count($course_compeltions['course_compeltions_created']) > 0){
       Queue::push(new CreateCourseCompletions($course_compeltions['course_compeltions_created']));
     }
-    if(count($course_compeltions['course_compeltions_updated']) > 0){
-      Queue::push(new UpdateCourseCompletions($course_compeltions['course_compeltions_updated']));
-    }
     $response =  [
-      'course_compeltions_created' => count($course_compeltions['course_compeltions_created']),
-      'course_compeltions_updated' => count($course_compeltions['course_compeltions_updated']),
+      'course_compeltions_created' => count($course_compeltions['course_compeltions_created']),      
       'errors'          => $course_compeltions['errors'],
     ];
     $this->apiLog($request,$response);

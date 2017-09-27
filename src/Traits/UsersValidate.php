@@ -72,6 +72,7 @@ trait UsersValidate
      $existing_users = collect([]);
      $level_details = LevelDetail::with('levels')->get();
      $users_in_db   = User::withTrashed()->get();
+     
      foreach($users as $key => $user){
        $error = [];
        if(!isset($user->forename) || !$user->forename || !ctype_alnum($user->forename)){
@@ -106,8 +107,9 @@ trait UsersValidate
            $levels = $levels->filter(function($item) use($user,$level_detail){
              return $item->name === $user->{$level_detail->name};
            });
-           if(count($levels) > 0){
-             $level_id = $levels[0]->id;
+           $level = $levels->first();
+           if($level){
+             $level_id = $level->id;
            }
          }
        }
