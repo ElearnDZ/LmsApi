@@ -38,7 +38,7 @@ class CourseCompletionsController extends Controller
     return $this->_course_completions->edit($id);
   }
 
-  public function update(CourseCompletions\StoreRequest $request,$id)
+  public function update(CourseCompletions\UpdateRequest $request,$id)
   {
     return $this->_course_completions->update($request,$id);
   }
