@@ -22,4 +22,5 @@ Route::group(['prefix'=>'api/lms/course/completions','middleware'=>['basicAuth']
 Route::group(['prefix'=>'csv/lms/course/completions','middleware'=>['auth','roles']],function(){
   Route::get('create','LmsApi\Controllers\CourseCompletionsCsvController@create');
   Route::post('create','LmsApi\Controllers\CourseCompletionsCsvController@store');
+  Route::get('download','LmsApi\Controllers\CourseCompletionsCsvController@download');
 });

@@ -14,6 +14,7 @@ class LmsApiServiceProvider extends ServiceProvider
 		$this->publishes([
 			dirname(__DIR__).'/Config/lmsapi.php' => config_path('lmsapi.php'),
 			dirname(__DIR__).'/views' => base_path('resources/views/vendor/LmsApi'),
+			dirname(__DIR__).'/templates' => public_path('uploads/LMS/')
 		]);
 	}
 

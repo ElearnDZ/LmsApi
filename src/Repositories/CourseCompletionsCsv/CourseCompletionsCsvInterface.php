@@ -5,4 +5,5 @@ interface CourseCompletionsCsvInterface
 {
   public function create();
   public function store(CourseCompletionsCsv\StoreRequest $request);
+  public function download();
 }
