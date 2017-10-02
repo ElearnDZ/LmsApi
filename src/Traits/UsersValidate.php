@@ -2,6 +2,7 @@
 use UMS\Models\LevelDetail;
 use App\User;
 use DB;
+use Config;
 trait UsersValidate
 {
 
@@ -17,14 +18,19 @@ trait UsersValidate
        'errors'   => []
      ];
 
-     if(!$request->has('user_ids')){
-       $result['errors'] = 'user_ids is required';
+     if(!$request->has('emp_no')){
+       $result['errors'] = 'emp_no is required';
      }else{
-       $user_ids = json_decode($request->user_ids);
-       if(!is_array($user_ids)){
-         $result["errors"] = 'user_ids should be an array json format';
+       $emp_nos = json_decode($request->emp_no);
+       if(!is_array($emp_nos)){
+         $result["errors"] = 'emp_no should be an array json format';
        }else{
-         $result['user_ids'] = User::withTrashed()->whereIn('id',$user_ids)->get(['id'])->toArray();
+         $users  = User::withTrashed()->get();
+
+         foreach($emp_nos as $key => $emp_no){
+           $emp_nos[$key] = Config::get('LoginPrefix').$emp_no;
+         }
+         $result['user_ids'] = User::withTrashed()->whereIn('login',$emp_nos)->get(['id'])->toArray();
        }
      }
      return $result;
@@ -72,7 +78,7 @@ trait UsersValidate
      $existing_users = collect([]);
      $level_details = LevelDetail::with('levels')->get();
      $users_in_db   = User::withTrashed()->get();
-     
+
      foreach($users as $key => $user){
        $error = [];
        if(!isset($user->forename) || !$user->forename || !ctype_alnum($user->forename)){
