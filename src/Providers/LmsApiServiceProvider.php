@@ -49,6 +49,12 @@ class LmsApiServiceProvider extends ServiceProvider
 			'LmsApi\Repositories\CourseCompletionsCsv\CourseCompletionsCsvInterface',
 			'LmsApi\Repositories\CourseCompletionsCsv\CourseCompletionsCsvRepository'
 		);
+
+		$this->app->bind
+		(
+			'LmsApi\Repositories\CourseCompletions\CourseCompletionsInterface',
+			'LmsApi\Repositories\CourseCompletions\CourseCompletionsRepository'
+		);
 	}
 
 

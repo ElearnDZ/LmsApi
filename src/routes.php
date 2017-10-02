@@ -24,3 +24,14 @@ Route::group(['prefix'=>'csv/lms/course/completions','middleware'=>['auth','role
   Route::post('create','LmsApi\Controllers\CourseCompletionsCsvController@store');
   Route::get('download','LmsApi\Controllers\CourseCompletionsCsvController@download');
 });
+
+
+Route::group(['prefix'=>'lms/course/completions','middleware'=>['auth','roles']],function(){
+  Route::get('','LmsApi\Controllers\CourseCompletionsController@index');
+  Route::get('create','LmsApi\Controllers\CourseCompletionsController@create');
+  Route::post('create','LmsApi\Controllers\CourseCompletionsController@store');
+  Route::get('view/{id}','LmsApi\Controllers\CourseCompletionsController@show');
+  Route::get('edit/{id}','LmsApi\Controllers\CourseCompletionsController@edit');
+  Route::post('edit/{id}','LmsApi\Controllers\CourseCompletionsController@update');
+  Route::get('delete/{id}','LmsApi\Controllers\CourseCompletionsController@destroy');
+});
