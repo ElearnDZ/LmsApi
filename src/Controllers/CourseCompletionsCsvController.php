@@ -23,4 +23,9 @@ class CourseCompletionsCsvController extends Controller
     return $this->_course_csv->store($request);
   }
 
+  public function download()
+  {
+    return $this->_course_csv->download();
+  }
+
 }

@@ -39,4 +39,10 @@ class CourseCompletionsCsvRepository implements CourseCompletionsCsvInterface
 
     return redirect()->back()->withErrors($response);
   }
+
+  public function download()
+  {
+    $file = public_path('uploads/LMS/template.csv');
+    return response()->download($file);
+  }
 }
