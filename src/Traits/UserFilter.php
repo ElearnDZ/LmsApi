@@ -64,6 +64,7 @@ trait UserFilter
    */
   public function filters($users)
   {
+
     $level_details = LevelDetail::all();
 
     return $users->filter(function($item) use($level_details) {
@@ -84,10 +85,11 @@ trait UserFilter
       if ($flag && Request::has('job_description')) {
         $flag   = $roles->contains('role',Request::get('job_description'));
       }
+
       if($flag){
         foreach($level_details as $level_detail){
-          if($flag && Request::has($level_detail->name)){
-            $flag = $item->level->name ===  Request::get($level_detail->name);
+          if($flag && Request::has(str_replace(' ','_',$level_detail->name))){
+            $flag = $item->level->name ===  Request::get(str_replace(' ','_',$level_detail->name));
           }
         }
       }
