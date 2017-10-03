@@ -15,7 +15,7 @@
 
 <div class="select">
 	<label>User Id</label>
-	<select class="cstm-select" name="user_id">
+	<select class="cstm-select" name="user_id" required="required">
 		<option value="">--Select User--</option>
 		@foreach($users as $user)
 		<option value="{{$user->id}}"
@@ -29,7 +29,7 @@
 
 <div class="select">
 	<label>Course Id</label>
-	<select class="cstm-select" name="course_id">
+	<select class="cstm-select" name="course_id" required="required">
 		<option value="">--Select Course--</option>
 		@foreach($courses as $course)
 		<option value="{{$course->id}}"
@@ -43,12 +43,12 @@
 
 <div>
 	<label>Score</label>
-  	<input type="number" name="score" value="{{$course_completion->score}}" min="0" max="100" placeholder="Score">
+  	<input type="number" name="score" value="{{$course_completion->score}}" min="0" max="100" placeholder="Score" required="required">
 </div>
 
 <div class="select">
 	<label>Status</label>
-  	<select class="cstm-select" name="status">
+  	<select class="cstm-select" name="status" required="required">
     <option value="incomplete">InComplete</option>
   		<option value="">--select status--</option>
 	    <option value="completed"
@@ -66,17 +66,17 @@
 
 <div>
 	<label>Issued Certificate</label>
-  	<input type="text" name="issued_certificate" value="{{$course_completion->issued_certificate}}">
+  	<input type="text" name="issued_certificate" value="{{$course_completion->issued_certificate}}" required="required">
 </div>
 
 <div>
 	<label>Start Date</label>
-	<input type="datetime" name="from_timestamp" value="{{$course_completion->from_timestamp}}">
+	<input type="datetime" name="from_timestamp" value="{{$course_completion->from_timestamp}}" required="required">
 </div>
 
-<div>
+<div class="date">
 	<label>End Date</label>
-	<input type="datetime" name="to_timestamp" value="{{$course_completion->to_timestamp}}">
+	<input type="datetime" name="to_timestamp" value="{{$course_completion->to_timestamp}}" required="required">
 </div>
 
     <!-- <input type="submit" name="" class="btn" value="Submit"> -->
