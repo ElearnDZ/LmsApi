@@ -106,9 +106,9 @@
     order: [],
     columnDefs: [
       { orderable: false, targets: ['no-sort']},
-      { visible:false,targets:[6,8]},
-      { orderData:[6],targets:[5]},
-      { orderData:[8],targets:[7]},
+      // { visible:false,targets:[6,8]},
+      // { orderData:[6],targets:[5]},
+      // { orderData:[8],targets:[7]},
     ],
     buttons: [
               {
