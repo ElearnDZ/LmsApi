@@ -49,7 +49,6 @@
 <div class="select">
 	<label>Status</label>
   	<select class="cstm-select" name="status" required="required">
-    <option value="incomplete">InComplete</option>
   		<option value="">--select status--</option>
 	    <option value="completed"
 	    @if($course_completion->status === 'completed')
