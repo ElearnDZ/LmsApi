@@ -2,7 +2,7 @@
 @section('title')
   LmsApi - Index
 @stop
-@secion('content')
+@section('content')
 <div class="content-header">
   <div class="title">
     <h1>List Of Course Completions</h1>

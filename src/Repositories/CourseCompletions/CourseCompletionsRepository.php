@@ -12,7 +12,6 @@ class CourseCompletionsRepository implements CourseCompletionsInterface
   {
 
     $course_completions = CourseCompletion::with(['user','course'])->get();
-
     return view('vendor.LmsApi.course_completions.index')
             ->with('course_completions',$course_completions);
   }
