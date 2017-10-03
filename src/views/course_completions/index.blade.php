@@ -1,5 +1,18 @@
-
-<table>
+@extends('base')
+@section('title')
+  LmsApi - Index
+@stop
+@secion('content')
+<div class="content-header">
+  <div class="title">
+    <h1>List Of Course Completions</h1>
+  </div>
+  <a href="/lms/course/completions/create">
+    <button type="button" class="primary">Create Course</button>
+  </a>
+</div> 
+@if(count($course_completions) > 0) 
+<table class="table striped bordered datatable">
   <thead>
     <tr>
       <th>Name</th>
@@ -30,13 +43,91 @@
       @endif
       <td>{{$course_completion->score}}</td>
       <td>{{$course_completion->issued_certificate}}</td>
-      <td>
-        <a href="{{url('lms/course/completions/view/'.$course_completion->id)}}"> View </a>
-        <a href="{{url('lms/course/completions/edit/'.$course_completion->id)}}"> Edit </a>
-        <a href="{{url('lms/course/completions/delete/'.$course_completion->id)}}"> Delete </a>
+      <td class="actions icons">
+        @if(Auth::user()->hasUrlAccess('lms/course/completions/view/*'))
+        <a href="{{url('lms/course/completions/view/'.$course_completion->id)}}"> 
+          <button type="button" class="dark"><i class="fa fa-eye"></i></button> 
+        </a>
+        @else
+          <a href="#">
+          <button type="button" disabled="disabled">
+            <i class="fa fa-eye"></i>
+          </button>
+          </a>
+        @endif
+
+        @if(Auth::user()->hasUrlAccess('lms/course/completions/edit/*'))
+        <a href="{{url('lms/course/completions/edit/'.$course_completion->id)}}"> 
+          <button type="button" class="dull"><i class="fa fa-pencil"></i></button> 
+        </a>
+        @else
+          <a href="#">
+          <button type="button" disabled="disabled">
+            <i class="fa fa-pencil"></i>
+          </button>
+          </a>
+        @endif
+
+        @if(Auth::user()->hasUrlAccess('lms/course/completions/delete/*'))
+        <a href="{{url('lms/course/completions/delete/'.$course_completion->id)}}"> 
+          <button type="button" class="dark"><i class="fa fa-trash"></i></button> 
+        </a>
+        @else
+          <a href="#">
+          <button type="button" disabled="disabled">
+            <i class="fa fa-trash"></i>
+          </button>
+          </a>
+        @endif
 
       </td>
     </tr>
     @endforeach
   </tbody>
 </table>
+@else
+  <h4>No Course Completions Found</h4>
+@endif
+@stop
+
+@section('customScripts')
+<!-- Datatable Export Buttons -->
+<script src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="//cdn.rawgit.com/bpampuch/pdfmake/0.1.27/build/vfs_fonts.js"></script>
+<script src="//cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
+
+<script type="text/javascript">
+ $(function(){
+    $('.datatable').dataTable({
+    //  "paging":false,
+    //  "info" : false
+    dom: "<'top-row'<'length'l><'buttons'B><'filter'f>><'middle-row'<'col-sm-12'tr>><'bottom-row'<'info'i><'pagination'p>>",
+    order: [],
+    columnDefs: [
+      { orderable: false, targets: ['no-sort']},
+      { visible:false,targets:[6,8]},
+      { orderData:[6],targets:[5]},
+      { orderData:[8],targets:[7]},
+    ],
+    buttons: [
+              {
+                extend : 'excelHtml5',
+                exportOptions: {
+                      columns: [ 0,1,2,3,4,5,6,7,8]
+                }
+              },
+              {
+                extend : 'csvHtml5',
+                exportOptions: {
+                      columns: [ 0,1,2,3,4,5,6,7,8]
+                }
+              }
+
+          ]
+
+    });
+ });
+ </script>
+@stop
+
