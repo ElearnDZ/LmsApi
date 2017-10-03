@@ -18,7 +18,7 @@
 
 <div class="select">
   <label>User Id</label>
-  <select class="cstm-select" name="user_id">
+  <select class="cstm-select" name="user_id" required="required">
     <option value="">--select User--</option>
     @foreach($users as $user)
     <option value="{{$user->id}}">{{$user->login}}</option>
@@ -28,7 +28,7 @@
 
 <div class="select">
   <label>Course Id</label>
-  <select class="cstm-select" name="course_id">
+  <select class="cstm-select" name="course_id" required="required">
     <option value="">--select course--</option>
     @foreach($courses as $course)
     <option value="{{$course->id}}">{{$course->course_name}}</option>
@@ -38,12 +38,12 @@
 
 <div>
   <label>Score</label>
-  <input type="number" name="score" value="" min="0" max="100" placeholder="Score">
+  <input type="number" name="score" value="" min="0" max="100" placeholder="Score" required="required">
 </div>
 
 <div class="select">
   <label>Status</label>
-  <select class="cstm-select" name="status">
+  <select class="cstm-select" name="status" required="required">
     <option value="">--select status--</option>
     <option value="completed">Completed</option>
     <option value="incomplete">InComplete</option>
@@ -52,17 +52,17 @@
 
 <div>
   <label>Issued Certificate</label>
-  <input type="text" name="issued_certificate" value="" placeholder="Issued Certificate">
+  <input type="text" name="issued_certificate" value="" placeholder="Issued Certificate" required="required">
 </div>
 
 <div>
   <label>Start Date</label>
-  <input type="datetime" name="from_timestamp" value="" placeholder="Course Start Date Time">
+  <input type="datetime" name="from_timestamp" value="" placeholder="Course Start Date Time" required="required">
 </div>
 
-<div>
+<div class="date">
   <label>End Date</label>
-  <input type="datetime" name="to_timestamp" value="" placeholder="Course End Date Time">
+  <input type="datetime" name="to_timestamp" value="" placeholder="Course End Date Time" required="required">
 </div>
 
   <!-- <input type="submit" name="" class="btn" value="Submit"> -->
