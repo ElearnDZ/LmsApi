@@ -35,7 +35,9 @@ class CourseCompletionsRepository implements CourseCompletionsInterface
 
   public function show($id)
   {
-
+    $course_completion = CourseCompletion::with(['course','user'])->findOrFail($id);
+    return view('vendor.LmsApi.course_completions.view')
+            ->with('course_completion',$course_completion);
   }
 
   public function edit($id)
